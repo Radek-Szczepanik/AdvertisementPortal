@@ -23,6 +23,7 @@ namespace AdvertisementPortal
             services.AddControllers();
             services.AddDbContext<AdvertisementDbContext>();
             services.AddScoped<AdvertisementSeeder>();
+            services.AddAutoMapper(this.GetType().Assembly);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AdvertisementPortal", Version = "v1" });
