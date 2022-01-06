@@ -9,6 +9,8 @@ namespace AdvertisementPortal
         public AdvertisementMappingProfile()
         {
             CreateMap<Advertisement, AdvertisementDto>();
+
+            CreateMap<CreateAdvertisementDto, Advertisement>();
         }
     }
 }

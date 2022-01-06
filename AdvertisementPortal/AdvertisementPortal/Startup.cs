@@ -1,4 +1,5 @@
 using AdvertisementPortal.Entities;
+using AdvertisementPortal.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,7 @@ namespace AdvertisementPortal
             services.AddDbContext<AdvertisementDbContext>();
             services.AddScoped<AdvertisementSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
+            services.AddScoped<IAdvertisementService, AdvertisementService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AdvertisementPortal", Version = "v1" });

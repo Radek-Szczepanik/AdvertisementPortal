@@ -1,5 +1,6 @@
 ﻿using AdvertisementPortal.Entities;
 using AdvertisementPortal.Models;
+using AdvertisementPortal.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -10,36 +11,43 @@ namespace AdvertisementPortal.Controllers
     [Route("api/advertisement")]
     public class AdvertisementController : ControllerBase
     {
-        private readonly AdvertisementDbContext dbContext;
-        private readonly IMapper mapper;
+        private readonly IAdvertisementService advertisementService;
 
-        public AdvertisementController(AdvertisementDbContext dbContext, IMapper mapper)
+        public AdvertisementController(IAdvertisementService advertisementService)
         {
-            this.dbContext = dbContext;
-            this.mapper = mapper;
+            this.advertisementService = advertisementService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<AdvertisementDto>> GetAll()
         {
-            var advertisement = dbContext.Advertisements.ToList();
-
-            var advertisementDtos = mapper.Map<List<AdvertisementDto>>(advertisement);
+            var advertisementDtos = advertisementService.GetAll();
 
             return Ok(advertisementDtos);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<AdvertisementDto> GetById([FromRoute]int id)
+        public ActionResult<AdvertisementDto> Get([FromRoute]int id)
         {
-            var advertisement = dbContext.Advertisements.FirstOrDefault(a => a.Id == id);
+            var advertisement = advertisementService.GetById(id);
 
-            if (advertisement is null)
+            if (advertisement == null)
                 return NotFound();
 
-            var advertisementDto = mapper.Map<AdvertisementDto>(advertisement);
+            return Ok(advertisement);
+        }
 
-            return Ok(advertisementDto);
+        [HttpPost]
+        public ActionResult CreateAdvertisement([FromBody] CreateAdvertisementDto createDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var id = advertisementService.Create(createDto);
+
+            return Created($"/api/advertisement/{id}", null);
         }
     }
 }
