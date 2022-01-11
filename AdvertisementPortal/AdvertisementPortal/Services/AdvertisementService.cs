@@ -1,6 +1,7 @@
 ﻿using AdvertisementPortal.Entities;
 using AdvertisementPortal.Models;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,11 +11,13 @@ namespace AdvertisementPortal.Services
     {
         private readonly AdvertisementDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly ILogger<AdvertisementService> logger;
 
-        public AdvertisementService(AdvertisementDbContext dbContext, IMapper mapper)
+        public AdvertisementService(AdvertisementDbContext dbContext, IMapper mapper, ILogger<AdvertisementService> logger)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         public AdvertisementDto GetById(int id)
@@ -44,6 +47,34 @@ namespace AdvertisementPortal.Services
             dbContext.SaveChanges();
 
             return advertisement.Id;
+        }
+
+        public bool Delete(int id)
+        {
+            logger.LogError($"Advertisement with id: {id} delete");
+
+            var advertisement = dbContext.Advertisements.FirstOrDefault(a => a.Id == id);
+
+            if (advertisement is null) return false;
+
+            dbContext.Advertisements.Remove(advertisement);
+            dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool Update(int id, UpdateAdvertisementDto updateDto)
+        {
+            var advertisement = dbContext.Advertisements.FirstOrDefault(a => a.Id == id);
+
+            if (advertisement is null) return false;
+
+            advertisement.Title = updateDto.Title;
+            advertisement.Content = updateDto.Content;
+
+            dbContext.SaveChanges();
+
+            return true;
         }
     }
 }

@@ -49,5 +49,31 @@ namespace AdvertisementPortal.Controllers
 
             return Created($"/api/advertisement/{id}", null);
         }
+
+        [HttpPut("{id}")]
+        public ActionResult Update([FromRoute] int id, [FromBody] UpdateAdvertisementDto updateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var isUpdated = advertisementService.Update(id, updateDto);
+            if(isUpdated)
+                return Ok();
+
+            return NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            var isDeleted = advertisementService.Delete(id);
+
+            if (isDeleted)
+                return NoContent();
+
+            return NotFound();
+        }
     }
 }

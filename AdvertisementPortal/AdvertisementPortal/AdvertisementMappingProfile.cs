@@ -11,6 +11,7 @@ namespace AdvertisementPortal
             CreateMap<Advertisement, AdvertisementDto>();
 
             CreateMap<CreateAdvertisementDto, Advertisement>();
+
         }
     }
 }
