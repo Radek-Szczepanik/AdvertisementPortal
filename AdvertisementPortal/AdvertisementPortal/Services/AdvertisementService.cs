@@ -1,4 +1,5 @@
 ﻿using AdvertisementPortal.Entities;
+using AdvertisementPortal.Exceptions;
 using AdvertisementPortal.Models;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -24,7 +25,7 @@ namespace AdvertisementPortal.Services
         {
             var advertisement = dbContext.Advertisements.FirstOrDefault(a => a.Id == id);
 
-            if (advertisement is null) return null;
+            if (advertisement is null) throw new NotFoundException("Advertisement not found");
 
             var advertisementDto = mapper.Map<AdvertisementDto>(advertisement);
 
@@ -49,32 +50,28 @@ namespace AdvertisementPortal.Services
             return advertisement.Id;
         }
 
-        public bool Delete(int id)
+        public void Delete(int id)
         {
             logger.LogError($"Advertisement with id: {id} delete");
 
             var advertisement = dbContext.Advertisements.FirstOrDefault(a => a.Id == id);
 
-            if (advertisement is null) return false;
+            if (advertisement is null) throw new NotFoundException("Advertisement not found");
 
             dbContext.Advertisements.Remove(advertisement);
             dbContext.SaveChanges();
-
-            return true;
         }
 
-        public bool Update(int id, UpdateAdvertisementDto updateDto)
+        public void Update(int id, UpdateAdvertisementDto updateDto)
         {
             var advertisement = dbContext.Advertisements.FirstOrDefault(a => a.Id == id);
 
-            if (advertisement is null) return false;
+            if (advertisement is null) throw new NotFoundException("Advertisement not found");
 
             advertisement.Title = updateDto.Title;
             advertisement.Content = updateDto.Content;
 
             dbContext.SaveChanges();
-
-            return true;
         }
     }
 }

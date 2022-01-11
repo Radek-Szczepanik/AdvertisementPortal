@@ -1,4 +1,5 @@
 using AdvertisementPortal.Entities;
+using AdvertisementPortal.Middleware;
 using AdvertisementPortal.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +27,8 @@ namespace AdvertisementPortal
             services.AddScoped<AdvertisementSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IAdvertisementService, AdvertisementService>();
+            services.AddScoped<ErrorHandlingMiddleware>();
+            services.AddScoped<RequestTimeMiddleware>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AdvertisementPortal", Version = "v1" });
@@ -43,6 +46,9 @@ namespace AdvertisementPortal
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AdvertisementPortal v1"));
             }
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
+            app.UseMiddleware<RequestTimeMiddleware>();
 
             app.UseHttpsRedirection();
 

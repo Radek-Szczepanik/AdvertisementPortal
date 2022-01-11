@@ -9,6 +9,7 @@ using System.Linq;
 namespace AdvertisementPortal.Controllers
 {
     [Route("api/advertisement")]
+    [ApiController]
     public class AdvertisementController : ControllerBase
     {
         private readonly IAdvertisementService advertisementService;
@@ -31,20 +32,12 @@ namespace AdvertisementPortal.Controllers
         {
             var advertisement = advertisementService.GetById(id);
 
-            if (advertisement == null)
-                return NotFound();
-
             return Ok(advertisement);
         }
 
         [HttpPost]
         public ActionResult CreateAdvertisement([FromBody] CreateAdvertisementDto createDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var id = advertisementService.Create(createDto);
 
             return Created($"/api/advertisement/{id}", null);
@@ -53,27 +46,17 @@ namespace AdvertisementPortal.Controllers
         [HttpPut("{id}")]
         public ActionResult Update([FromRoute] int id, [FromBody] UpdateAdvertisementDto updateDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var isUpdated = advertisementService.Update(id, updateDto);
-            if(isUpdated)
-                return Ok();
-
-            return NotFound();
+            advertisementService.Update(id, updateDto);
+            
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            var isDeleted = advertisementService.Delete(id);
+            advertisementService.Delete(id);
 
-            if (isDeleted)
-                return NoContent();
-
-            return NotFound();
+            return NoContent();
         }
     }
 }
