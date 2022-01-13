@@ -17,6 +17,13 @@ namespace AdvertisementPortal
         {
             if (dbContext.Database.CanConnect())    // czy jest połączenie z bazą danych ?
             {
+                if (!dbContext.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    dbContext.Roles.AddRange(roles);
+                    dbContext.SaveChanges();
+                }
+
                 if (!dbContext.Advertisements.Any())    // czy tabela Advertisement jest pusta ?
                 {
                     var advertisements = GetAdvertisements();
@@ -24,6 +31,23 @@ namespace AdvertisementPortal
                     dbContext.SaveChanges();
                 }
             }
+        }
+
+        private IEnumerable<Role> GetRoles()
+        {
+            var roles = new List<Role>()
+            {
+                new Role
+                {
+                    Name = "User"
+                },
+                new Role
+                {
+                    Name = "Admin"
+                }
+            };
+
+            return roles;
         }
 
         private IEnumerable<Advertisement> GetAdvertisements()
