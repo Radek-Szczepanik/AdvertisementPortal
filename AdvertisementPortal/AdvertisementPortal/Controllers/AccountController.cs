@@ -14,11 +14,19 @@ namespace AdvertisementPortal.Controllers
         {
             this.accountService = accountService;
         }
+
         [HttpPost("register")]
         public ActionResult RegisterUser([FromBody] RegisterUserDto dto)
         {
             accountService.RegisterUser(dto);
             return Ok();
+        }
+
+        [HttpPost]
+        public ActionResult Login([FromBody] LoginDto dto)
+        {
+            string token = accountService.GenerateJwt(dto);
+            return Ok(token);
         }
     }
 }
