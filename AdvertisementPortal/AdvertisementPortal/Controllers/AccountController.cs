@@ -22,7 +22,7 @@ namespace AdvertisementPortal.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public ActionResult Login([FromBody] LoginDto dto)
         {
             string token = accountService.GenerateJwt(dto);

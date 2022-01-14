@@ -43,7 +43,7 @@ namespace AdvertisementPortal
             {
                 cfg.RequireHttpsMetadata = false;
                 cfg.SaveToken = true;
-                cfg.TokenValidationParameters = new TokenValidationParameters()
+                cfg.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer =  authenticationSettings.JwtIssuer,
                     ValidAudience = authenticationSettings.JwtIssuer,
