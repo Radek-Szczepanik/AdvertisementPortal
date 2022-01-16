@@ -2,6 +2,7 @@
 using AdvertisementPortal.Models;
 using AdvertisementPortal.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace AdvertisementPortal.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult<IEnumerable<AdvertisementDto>> GetAll()
         {
             var advertisementDtos = advertisementService.GetAll();
