@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace AdvertisementPortal.Entities
+﻿namespace AdvertisementPortal.Entities
 {
     public class Advertisement
     {
@@ -9,5 +7,7 @@ namespace AdvertisementPortal.Entities
         public string Content { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public int? CreatedById { get; set; }
+        public virtual User CreatedBy { get; set; }
     }
 }

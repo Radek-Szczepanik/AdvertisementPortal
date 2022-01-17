@@ -1,3 +1,4 @@
+using AdvertisementPortal.Authorization;
 using AdvertisementPortal.Entities;
 using AdvertisementPortal.Middleware;
 using AdvertisementPortal.Models;
@@ -5,6 +6,7 @@ using AdvertisementPortal.Models.Validators;
 using AdvertisementPortal.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -51,6 +53,7 @@ namespace AdvertisementPortal
                 };
             });
 
+            services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
             services.AddControllers().AddFluentValidation();
             services.AddDbContext<AdvertisementDbContext>();
             services.AddScoped<AdvertisementSeeder>();

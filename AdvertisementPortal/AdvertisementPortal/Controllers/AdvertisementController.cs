@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace AdvertisementPortal.Controllers
 {
@@ -40,7 +41,8 @@ namespace AdvertisementPortal.Controllers
         [HttpPost]
         public ActionResult CreateAdvertisement([FromBody] CreateAdvertisementDto createDto)
         {
-            var id = advertisementService.Create(createDto);
+            var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var id = advertisementService.Create(createDto, userId);
 
             return Created($"/api/advertisement/{id}", null);
         }
@@ -48,7 +50,7 @@ namespace AdvertisementPortal.Controllers
         [HttpPut("{id}")]
         public ActionResult Update([FromRoute] int id, [FromBody] UpdateAdvertisementDto updateDto)
         {
-            advertisementService.Update(id, updateDto);
+            advertisementService.Update(id, updateDto, User);
             
             return Ok();
         }
@@ -56,7 +58,7 @@ namespace AdvertisementPortal.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            advertisementService.Delete(id);
+            advertisementService.Delete(id, User);
 
             return NoContent();
         }
