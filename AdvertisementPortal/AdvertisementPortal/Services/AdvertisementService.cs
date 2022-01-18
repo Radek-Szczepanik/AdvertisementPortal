@@ -17,14 +17,16 @@ namespace AdvertisementPortal.Services
         private readonly IMapper mapper;
         private readonly ILogger<AdvertisementService> logger;
         private readonly IAuthorizationService authorizationService;
+        private readonly IUserContextService userContextService;
 
         public AdvertisementService(AdvertisementDbContext dbContext, IMapper mapper, ILogger<AdvertisementService> logger,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService, IUserContextService userContextService)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
             this.logger = logger;
             this.authorizationService = authorizationService;
+            this.userContextService = userContextService;
         }
 
         public AdvertisementDto GetById(int id)
@@ -47,17 +49,17 @@ namespace AdvertisementPortal.Services
             return advertisementDto;
         }
 
-        public int Create(CreateAdvertisementDto createDto, int userId)
+        public int Create(CreateAdvertisementDto createDto)
         {
             var advertisement = mapper.Map<Advertisement>(createDto);
-            advertisement.CreatedById = userId;
+            advertisement.CreatedById = userContextService.GetUserId;
             dbContext.Advertisements.Add(advertisement);
             dbContext.SaveChanges();
 
             return advertisement.Id;
         }
 
-        public void Delete(int id, ClaimsPrincipal user)
+        public void Delete(int id)
         {
             logger.LogError($"Advertisement with id: {id} delete");
 
@@ -65,7 +67,7 @@ namespace AdvertisementPortal.Services
 
             if (advertisement is null) throw new NotFoundException("Advertisement not found");
 
-            var authorizationResult = authorizationService.AuthorizeAsync(user, advertisement,
+            var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, advertisement,
                 new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
 
             if (!authorizationResult.Succeeded)
@@ -77,13 +79,13 @@ namespace AdvertisementPortal.Services
             dbContext.SaveChanges();
         }
 
-        public void Update(int id, UpdateAdvertisementDto updateDto, ClaimsPrincipal user)
+        public void Update(int id, UpdateAdvertisementDto updateDto)
         {
             var advertisement = dbContext.Advertisements.FirstOrDefault(a => a.Id == id);
 
             if (advertisement is null) throw new NotFoundException("Advertisement not found");
 
-            var authorizationResult = authorizationService.AuthorizeAsync(user, advertisement,
+            var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, advertisement,
                 new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
             if (!authorizationResult.Succeeded)

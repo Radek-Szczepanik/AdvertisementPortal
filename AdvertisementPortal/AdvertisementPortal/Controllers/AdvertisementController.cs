@@ -41,16 +41,15 @@ namespace AdvertisementPortal.Controllers
         [HttpPost]
         public ActionResult CreateAdvertisement([FromBody] CreateAdvertisementDto createDto)
         {
-            var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            var id = advertisementService.Create(createDto, userId);
-
-            return Created($"/api/advertisement/{id}", null);
+            var userId = advertisementService.Create(createDto);
+            
+            return Created($"/api/advertisement/{userId}", null);
         }
 
         [HttpPut("{id}")]
         public ActionResult Update([FromRoute] int id, [FromBody] UpdateAdvertisementDto updateDto)
         {
-            advertisementService.Update(id, updateDto, User);
+            advertisementService.Update(id, updateDto);
             
             return Ok();
         }
@@ -58,7 +57,7 @@ namespace AdvertisementPortal.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            advertisementService.Delete(id, User);
+            advertisementService.Delete(id);
 
             return NoContent();
         }
