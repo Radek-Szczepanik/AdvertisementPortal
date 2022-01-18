@@ -1,6 +1,5 @@
 ﻿using AdvertisementPortal.Models;
 using System.Collections.Generic;
-using System.Security.Claims;
 
 namespace AdvertisementPortal.Services
 {
@@ -9,7 +8,7 @@ namespace AdvertisementPortal.Services
         int Create(CreateAdvertisementDto createDto);
         void Delete(int id);
         void Update(int id, UpdateAdvertisementDto updateDto);
-        IEnumerable<AdvertisementDto> GetAll();
+        IEnumerable<AdvertisementDto> GetAll(string searchPhrase);
         AdvertisementDto GetById(int id);
     }
 }

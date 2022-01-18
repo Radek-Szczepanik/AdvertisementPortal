@@ -40,9 +40,10 @@ namespace AdvertisementPortal.Services
             return advertisementDto;
         }
 
-        public IEnumerable<AdvertisementDto> GetAll()
+        public IEnumerable<AdvertisementDto> GetAll(string searchPhrase)
         {
-            var advertisement = dbContext.Advertisements.ToList();
+            var advertisement = dbContext.Advertisements.Where(r => searchPhrase == null || (r.Title.ToLower().Contains(searchPhrase.ToLower())
+                                                            || r.Content.ToLower().Contains(searchPhrase.ToLower()))).ToList();
 
             var advertisementDto = mapper.Map<List<AdvertisementDto>>(advertisement);
 
