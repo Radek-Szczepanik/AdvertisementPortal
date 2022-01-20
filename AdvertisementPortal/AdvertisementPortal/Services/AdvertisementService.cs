@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 
 namespace AdvertisementPortal.Services
 {
@@ -40,14 +39,25 @@ namespace AdvertisementPortal.Services
             return advertisementDto;
         }
 
-        public IEnumerable<AdvertisementDto> GetAll(string searchPhrase)
+        public PagedResoult<AdvertisementDto> GetAll(AdvertisementQuery query)
         {
-            var advertisement = dbContext.Advertisements.Where(r => searchPhrase == null || (r.Title.ToLower().Contains(searchPhrase.ToLower())
-                                                            || r.Content.ToLower().Contains(searchPhrase.ToLower()))).ToList();
+            var baseQuery = dbContext
+                .Advertisements
+                .Where(r => query.SearchPhrase == null || (r.Title.ToLower().Contains(query.SearchPhrase.ToLower())
+                                                            || r.Content.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+            var advertisement = baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
+                .ToList();
+
+            var totalItemsCount = baseQuery.Count();
 
             var advertisementDto = mapper.Map<List<AdvertisementDto>>(advertisement);
 
-            return advertisementDto;
+            var result = new PagedResoult<AdvertisementDto>(advertisementDto, totalItemsCount, query.PageSize, query.PageNumber);
+
+            return result;
         }
 
         public int Create(CreateAdvertisementDto createDto)

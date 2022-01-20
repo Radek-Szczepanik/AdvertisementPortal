@@ -1,5 +1,4 @@
 ﻿using AdvertisementPortal.Models;
-using System.Collections.Generic;
 
 namespace AdvertisementPortal.Services
 {
@@ -8,7 +7,7 @@ namespace AdvertisementPortal.Services
         int Create(CreateAdvertisementDto createDto);
         void Delete(int id);
         void Update(int id, UpdateAdvertisementDto updateDto);
-        IEnumerable<AdvertisementDto> GetAll(string searchPhrase);
+        PagedResoult<AdvertisementDto> GetAll(AdvertisementQuery query);
         AdvertisementDto GetById(int id);
     }
 }
