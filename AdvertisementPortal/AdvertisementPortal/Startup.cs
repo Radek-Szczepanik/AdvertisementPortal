@@ -63,6 +63,7 @@ namespace AdvertisementPortal
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+            services.AddScoped<IValidator<AdvertisementQuery>, AdvertisementQueryValidator>();
             services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddHttpContextAccessor();
