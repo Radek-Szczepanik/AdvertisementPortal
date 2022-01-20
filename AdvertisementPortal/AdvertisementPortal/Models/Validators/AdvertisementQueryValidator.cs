@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AdvertisementPortal.Entities;
+using FluentValidation;
 using System.Linq;
 
 namespace AdvertisementPortal.Models.Validators
@@ -6,6 +7,8 @@ namespace AdvertisementPortal.Models.Validators
     public class AdvertisementQueryValidator : AbstractValidator<AdvertisementQuery>
     {
         private int[] allowedPageSizes = new[] { 5, 10, 15 };
+
+        private string[] allowedSortByColumnNames = { nameof(Advertisement.Title), nameof(Advertisement.Content) };
         public AdvertisementQueryValidator()
         {
             RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(1);
@@ -16,6 +19,12 @@ namespace AdvertisementPortal.Models.Validators
                     context.AddFailure("PageSize", $"PageSize must be in [{string.Join(",", allowedPageSizes)}]");
                 }
             });
+
+            RuleFor(r => r.SortBy).Must(value => string.IsNullOrEmpty(value) || allowedSortByColumnNames.Contains(value))
+                                  .WithMessage($"Sort by is optional or must be in [{string.Join(",", allowedSortByColumnNames)}]");
+                 
+
+
         }
     }
 }

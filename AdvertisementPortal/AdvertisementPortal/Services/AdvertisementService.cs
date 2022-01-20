@@ -5,8 +5,10 @@ using AdvertisementPortal.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace AdvertisementPortal.Services
 {
@@ -45,6 +47,21 @@ namespace AdvertisementPortal.Services
                 .Advertisements
                 .Where(r => query.SearchPhrase == null || (r.Title.ToLower().Contains(query.SearchPhrase.ToLower())
                                                             || r.Content.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                var columnsSelectors = new Dictionary<string, Expression<Func<Advertisement, object>>>
+                {
+                    { nameof(Advertisement.Title), r => r.Title },
+                    { nameof(Advertisement.Content), r => r.Content },
+                };
+
+                var selectedColumn = columnsSelectors[query.SortBy];
+
+                baseQuery = query.SortDirection == SortDirection.ASC
+                    ? baseQuery.OrderBy(selectedColumn)
+                    : baseQuery.OrderByDescending(selectedColumn);
+            }
 
             var advertisement = baseQuery
                 .Skip(query.PageSize * (query.PageNumber - 1))
