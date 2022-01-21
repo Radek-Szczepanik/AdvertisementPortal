@@ -84,12 +84,10 @@ namespace AdvertisementPortal
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AdvertisementSeeder seeder)
         {
+            app.UseResponseCaching();
             app.UseStaticFiles();
-
             app.UseCors("FrontEndClient");
-
             seeder.Seed();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -97,15 +95,11 @@ namespace AdvertisementPortal
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AdvertisementPortal v1"));
             }
             app.UseMiddleware<ErrorHandlingMiddleware>();
-
             app.UseMiddleware<RequestTimeMiddleware>();
             app.UseAuthentication();
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
