@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -55,7 +56,8 @@ namespace AdvertisementPortal
 
             services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
             services.AddControllers().AddFluentValidation();
-            services.AddDbContext<AdvertisementDbContext>();
+            services.AddDbContext<AdvertisementDbContext>(options => options
+                    .UseSqlServer(Configuration.GetConnectionString("AdvertisementDbConnection")));
             services.AddScoped<AdvertisementSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IAdvertisementService, AdvertisementService>();

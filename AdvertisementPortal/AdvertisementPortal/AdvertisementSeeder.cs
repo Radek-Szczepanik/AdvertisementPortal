@@ -1,4 +1,5 @@
 ﻿using AdvertisementPortal.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,6 +18,12 @@ namespace AdvertisementPortal
         {
             if (dbContext.Database.CanConnect())    // czy jest połączenie z bazą danych ?
             {
+                var pendingMigrations = dbContext.Database.GetPendingMigrations();
+                if (pendingMigrations != null && pendingMigrations.Any())
+                {
+                    dbContext.Database.Migrate();
+                }
+
                 if (!dbContext.Roles.Any())
                 {
                     var roles = GetRoles();
