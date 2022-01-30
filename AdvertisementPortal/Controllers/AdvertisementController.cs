@@ -35,6 +35,7 @@ namespace AdvertisementPortal.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult CreateAdvertisement([FromBody] CreateAdvertisementDto createDto)
         {
             var userId = advertisementService.Create(createDto);
