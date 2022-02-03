@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AdvertisementPortal.Exceptions
+﻿namespace AdvertisementPortal.Exceptions
 {
     public class BadRequestException : Exception
     {

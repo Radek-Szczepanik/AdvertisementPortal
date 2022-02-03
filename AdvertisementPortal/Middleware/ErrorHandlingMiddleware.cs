@@ -1,8 +1,4 @@
 ﻿using AdvertisementPortal.Exceptions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 
 namespace AdvertisementPortal.Middleware
 {

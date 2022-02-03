@@ -2,7 +2,6 @@
 using AdvertisementPortal.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace AdvertisementPortal.Controllers
 {

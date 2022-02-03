@@ -1,6 +1,5 @@
 ﻿using AdvertisementPortal.Entities;
 using FluentValidation;
-using System.Linq;
 
 namespace AdvertisementPortal.Models.Validators
 {

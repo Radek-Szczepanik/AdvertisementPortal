@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AdvertisementPortal.Models
+﻿namespace AdvertisementPortal.Models
 {
     public class PagedResoult<T>
     {

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace AdvertisementPortal.Models
+﻿namespace AdvertisementPortal.Models
 {
     public class RegisterUserDto
     {
