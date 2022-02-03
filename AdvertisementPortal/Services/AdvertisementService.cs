@@ -119,6 +119,8 @@ namespace AdvertisementPortal.Services
 
             advertisement.Title = updateDto.Title;
             advertisement.Content = updateDto.Content;
+            advertisement.Email = updateDto.Email;
+            advertisement.PhoneNumber = updateDto.PhoneNumber;
 
             dbContext.SaveChanges();
         }
