@@ -4,10 +4,6 @@ using AdvertisementPortal.Exceptions;
 using AdvertisementPortal.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace AdvertisementPortal.Services

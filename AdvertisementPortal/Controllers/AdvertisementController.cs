@@ -18,7 +18,6 @@ namespace AdvertisementPortal.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public ActionResult<IEnumerable<AdvertisementDto>> GetAll([FromQuery] AdvertisementQuery query)
         {
             var advertisementDtos = advertisementService.GetAll(query);
